@@ -1,0 +1,18 @@
+int main(void) {
+    FILE *fichier = fopen("etudiants.txt", "r");
+    if (fichier == NULL) {
+        printf("Impossible d'ouvrir le fichier.\n");
+        return 1;
+    }
+
+    // Lire les informations des étudiants depuis le fichier
+    for (int i = 0; i < nombreEtudiants; i++) {
+        fscanf(fichier, "Nom: %s\n", etudiant[i].nom);
+        fscanf(fichier, "Prenom: %s\n", etudiant[i].prenom);
+        // Lire d'autres informations ici
+    }
+
+    // Fermer le fichier
+    fclose(fichier);
+    return 0;
+}

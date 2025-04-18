@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Définition des structures (identiques à celles que vous avez fournies)
+// ...
+
+// Fonction pour sauvegarder les informations des étudiants dans un fichier CSV
+void sauvegarderEtudiants() {
+    FILE *file = fopen("etudiants.csv", "w");
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier.\n");
+        return;
+    }
+
+    for (int i = 0; i < le.sv; i++) {
+        fprintf(file, "%d,%s,%s,%d,%d,%d\n", le.te[i].mat, le.te[i].nom, le.te[i].prenom, le.te[i].dn.j, le.te[i].dn.m, le.te[i].dn.a);
+    }
+
+    fclose(file);
+}
+
+// Fonction pour charger les informations des étudiants à partir d'un fichier CSV
+void chargerEtudiants() {
+    FILE *file = fopen("etudiants.csv", "r");
+    if (file == NULL) {
+        printf("Aucun fichier de données trouvé.\n");
+        return;
+    }
+
+    le.sv = 0; // Réinitialiser le nombre d'étudiants
+
+    while (fscanf(file, "%d,%[^,],%[^,],%d,%d,%d\n", &le.te[le.sv].mat, le.te[le.sv].nom, le.te[le.sv].prenom, &le.te[le.sv].dn.j, &le.te[le.sv].dn.m, &le.te[le.sv].dn.a) != EOF) {
+        le.sv++; // Incrémenter le nombre d'étudiants
+    }
+
+    fclose(file);
+}
+
+int main() {
+    // Charger les données des étudiants au démarrage de l'application
+    chargerEtudiants();
+
+    // ... Reste du code ...
+
+    // Sauvegarder les données des étudiants avant de quitter
+    sauvegarderEtudiants();
+
+    return 0;
+}
+
+
+bool cherchere(int m) {
+    int cpt = 0;
+    if (le.sv == 0) {
+        return false;
+    } else {
+        for (int t = 0; t < le.sv; t++) {
+            if (le.te[t].mat == m) {
+                cpt += 1;
+                // Vous avez trouvé l'étudiant correspondant au matricule m
+                // Vous pouvez accéder aux informations de cet étudiant ici
+                printf("Informations de l'étudiant avec le matricule %d :\n", m);
+                printf("Nom: %s\n", le.te[t].nom);
+                printf("Prénom: %s\n", le.te[t].prenom);
+                printf("Date de naissance: %d/%d/%d\n", le.te[t].dn.j, le.te[t].dn.m, le.te[t].dn.a);
+                // ...
+            }
+        }
+        if (cpt > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}

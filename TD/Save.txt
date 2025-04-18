@@ -1,0 +1,108 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// ...
+
+// Fonction pour sauvegarder les informations des étudiants et leurs notes dans un fichier CSV
+void sauvegarderEtudiantsEtNotes() {
+    FILE *file = fopen("etudiants.csv", "w");
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier.\n");
+        return;
+    }
+
+    // En-tête du fichier CSV
+    fprintf(file, "Matricule,Nom,Prenom,JourNaissance,MoisNaissance,AnneeNaissance");
+    for (int i = 0; i < lu.lib; i++) {
+        fprintf(file, ",%s", lu.tu[i].l);
+    }
+    fprintf(file, "\n");
+
+    for (int i = 0; i < le.sv; i++) {
+        fprintf(file, "%d,%s,%s,%d,%d,%d", le.te[i].mat, le.te[i].nom, le.te[i].prenom, le.te[i].dn.j, le.te[i].dn.m, le.te[i].dn.a);
+
+        // Ajouter les notes pour chaque unité d'enseignement
+        for (int j = 0; j < lu.lib; j++) {
+            fprintf(file, ",%.1f", le.te[i].sn.tu[j].n);
+        }
+
+        fprintf(file, "\n");
+    }
+
+    fclose(file);
+}
+
+// Fonction pour charger les informations des étudiants et leurs notes à partir d'un fichier CSV
+void chargerEtudiantsEtNotes() {
+    FILE *file = fopen("etudiants.csv", "r");
+    if (file == NULL) {
+        printf("Aucun fichier de données trouvé.\n");
+        return;
+    }
+
+    char header[512]; // Pour stocker la première ligne de l'en-tête
+    fscanf(file, "%[^\n]\n", header); // Lire l'en-tête sans l'enregistrer
+
+    while (fscanf(file, "%d,%[^,],%[^,],%d,%d,%d", &le.te[le.sv].mat, le.te[le.sv].nom, le.te[le.sv].prenom, &le.te[le.sv].dn.j, &le.te[le.sv].dn.m, &le.te[le.sv].dn.a) != EOF) {
+        // Charger les notes pour chaque unité d'enseignement
+        for (int j = 0; j < lu.lib; j++) {
+            fscanf(file, ",%f", &le.te[le.sv].sn.tu[j].n);
+        }
+
+        le.sv++; // Incrémenter le nombre d'étudiants
+    }
+
+    fclose(file);
+}
+
+// ...
+
+int main() {
+    // Charger les données des étudiants et de leurs notes au démarrage de l'application
+    chargerEtudiantsEtNotes();
+
+    // ... Reste du code ...
+
+    // Sauvegarder les données des étudiants et de leurs notes avant de quitter
+    sauvegarderEtudiantsEtNotes();
+
+    return 0;
+}
+
+
+// Fonction pour sauvegarder les informations des unités d'enseignement dans un fichier CSV
+void sauvegarderUnitesEnseignement() {
+    FILE *file = fopen("unites_enseignement.csv", "w");
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier.\n");
+        return;
+    }
+
+    // En-tête du fichier CSV
+    fprintf(file, "Code,Libelle,Coeficient\n");
+
+    for (int i = 0; i < lu.lib; i++) {
+        fprintf(file, "%d,%s,%d\n", lu.tu[i].c, lu.tu[i].l, lu.tu[i].cf);
+    }
+
+    fclose(file);
+}
+
+// Fonction pour charger les informations des unités d'enseignement à partir d'un fichier CSV
+void chargerUnitesEnseignement() {
+    FILE *file = fopen("unites_enseignement.csv", "r");
+    if (file == NULL) {
+        printf("Aucun fichier de données trouvé.\n");
+        return;
+    }
+
+    char header[512]; // Pour stocker la première ligne de l'en-tête
+    fscanf(file, "%[^\n]\n", header); // Lire l'en-tête sans l'enregistrer
+
+    while (fscanf(file, "%d,%[^,],%d", &lu.tu[lu.lib].c, lu.tu[lu.lib].l, &lu.tu[lu.lib].cf) != EOF) {
+        lu.lib++; // Incrémenter le nombre d'unités d'enseignement
+    }
+
+    fclose(file);
+}

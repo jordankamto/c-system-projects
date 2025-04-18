@@ -1,0 +1,97 @@
+// ...
+
+// Structure de données pour les notes des étudiants
+struct notes {
+    float notes[10]; // 10 unités d'enseignement au maximum
+};
+
+// Structure de données pour les étudiants, y compris les notes
+struct etudiant {
+    int mat; // Matricule
+    char nom[30];
+    char prenom[30];
+    DATE dn;
+    LUNITE sn; // Liste des unités d'enseignement
+    struct notes notes; // Notes associées à chaque unité
+};
+
+// ...
+
+// Fonction pour insérer la note d'un étudiant
+void insererno() {
+    int chx, mte, cm;
+    float nt;
+    while (1) {
+        printf("1-Ajouter\n2-Menu\n");
+        scanf("%d", &chx);
+        if (chx == 2) {
+            break;
+        } else if (chx == 1) {
+            printf("Entrer le matricule\n");
+            scanf("%d", &mte);
+            if (cherchere(mte)) {
+                printf("Entrer le code de la matière\n");
+                scanf("%d", &cm);
+                if (chercheru(cm)) {
+                    printf("Entrer la note de l'étudiant\n");
+                    scanf("%f", &nt);
+                    // Enregistrez la note dans la structure de données des étudiants
+                    le.te[mte - 1].notes.notes[cm - 1] = nt;
+                } else {
+                    printf("Cette matière n'existe pas dans la liste des matières des étudiants. Il faut au préalable l'ajouter (voir cette option dans le menu) si la liste des matières est incomplète dans la dite liste.\nNote non insérée\n");
+                }
+            } else {
+                printf("Matricule inexistant. Note non insérée\n");
+            }
+        } else {
+            printf("Entrée invalide\n");
+        }
+    }
+    if (chx == 2) {
+        menu();
+    }
+}
+
+// ...
+
+// Fonction pour enregistrer les étudiants et leurs notes dans un fichier CSV
+void enregistrer_etudiants_dans_csv() {
+    FILE *fichierEtudiants = fopen("etudiants.csv", "w");
+    if (fichierEtudiants == NULL) {
+        printf("Erreur : Impossible d'ouvrir le fichier des étudiants.\n");
+        return;
+    }
+
+    // Enregistrez chaque étudiant et ses notes dans le fichier CSV
+    for (int i = 0; i < le.sv; i++) {
+        fprintf(fichierEtudiants, "%d,%s,%s,%d,%d,%d,", le.te[i].mat, le.te[i].nom, le.te[i].prenom, le.te[i].dn.j, le.te[i].dn.m, le.te[i].dn.a);
+        for (int j = 0; j < lu.lib; j++) {
+            fprintf(fichierEtudiants, "%f,", le.te[i].notes.notes[j]);
+        }
+        fprintf(fichierEtudiants, "\n");
+    }
+
+    fclose(fichierEtudiants);
+    printf("Étudiants et notes enregistrés dans le fichier des étudiants.\n");
+}
+
+// ...
+
+int main() {
+    // ...
+
+    while (1) {
+        // ...
+
+        if (menuc == 2) {
+            ajouter_et();
+        } else if (menuc == 3) {
+            insererno();
+        }
+
+        // ...
+
+    }
+
+    return 0;
+}
